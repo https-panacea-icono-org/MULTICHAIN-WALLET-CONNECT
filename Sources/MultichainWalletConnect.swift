@@ -390,8 +390,8 @@ public class MultichainWalletManager: ObservableObject {
     // MARK: - Private Methods
     
     private func setupNetworkManagers() {
-        // Los gestores de red se implementarían aquí
-        // Por ahora, solo tenemos placeholders
+        // Register mock managers for all networks to provide a working demo.
+        networkManagers = MockNetworkManagerFactory.createManagers(for: Array(SupportedNetwork.allCases))
     }
     
     private func updateAvailableWallets() {

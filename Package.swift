@@ -41,5 +41,12 @@ let package = Package(
             ],
             path: "Sources"
         ),
+        .testTarget(
+            name: "MultichainWalletConnectTests",
+            dependencies: [
+                "MultichainWalletConnect"
+            ],
+            path: "Tests"
+        ),
     ]
 )
