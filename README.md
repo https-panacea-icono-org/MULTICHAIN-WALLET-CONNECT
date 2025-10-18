@@ -11,11 +11,10 @@ Sistema unificado de conexión de billeteras multichain para el ecosistema PANAC
 - **Algorand Mainnet** - Pera Wallet, MyAlgo
 - **Solana Mainnet** - Phantom, Solflare
 - **Ethereum Mainnet** - MetaMask, WalletConnect
-- **Futuras redes** - Arquitectura extensible
 
 ### Métodos de Conexión
 - **QR Code** - Escaneo directo para billeteras móviles
-- **WalletConnect** - Protocolo universal de conexión
+- **WalletConnect** - Protocolo universal de conexión (configurado)
 - **Deep Links** - Conexión directa a aplicaciones nativas
 
 ## 📁 Estructura del Proyecto
@@ -23,41 +22,31 @@ Sistema unificado de conexión de billeteras multichain para el ecosistema PANAC
 ```
 MULTICHAIN-WALLET-CONNECT/
 ├── Sources/
-│   ├── Core/
-│   │   ├── MultichainWalletManager.swift
-│   │   ├── SharedTypes.swift
-│   │   └── WalletConnectConfig.swift
-│   ├── Networks/
-│   │   ├── TON/
-│   │   ├── Algorand/
-│   │   ├── Solana/
-│   │   └── Ethereum/
-│   ├── Wallets/
-│   │   └── TONKeeper/
-│   ├── QR/
-│   │   └── QRCodeGenerator.swift
-│   └── Utils/
-│       └── WalletModels.swift
-├── Tests/
-├── Package.swift
-└── README.md
+│   └── MultichainWalletConnect.swift        # Módulo completo unificado
+├── Package.swift                            # Configuración Swift Package
+├── README.md                               # Documentación principal
+├── INTEGRATION_GUIDE.md                    # Guía de integración
+├── CONFIGURACION_WALLETCONNECT.md          # Configuración WalletConnect
+└── env.example                             # Variables de entorno
 ```
 
 ## 🔧 Características Principales
 
 ### ✅ Implementado
-- Arquitectura modular y extensible
-- Soporte para múltiples redes blockchain
+- Arquitectura unificada y simplificada
+- Soporte para múltiples redes blockchain (TON, Algorand, Solana, Ethereum)
 - Sistema de QR para conexión móvil
-- Integración con WalletConnect
+- Integración con WalletConnect (configurado)
 - Gestión unificada de billeteras
 - Configuración para mainnet
 - IDs de WalletConnect configurados
+- Compilación exitosa del proyecto
+- Tipos de datos completos y funcionales
 
 ### 🚧 En Desarrollo
-- Integración específica con TONKeeper
-- Conexión directa con Pera Wallet
-- Soporte completo para Phantom Wallet
+- Implementación completa de gestores de red específicos
+- Integración con SDKs específicos de cada red
+- Conexión directa con billeteras nativas
 - Sistema de notificaciones push
 - Analytics y métricas de uso
 
@@ -80,23 +69,25 @@ import MultichainWalletConnect
 let walletManager = MultichainWalletManager.shared
 
 // Conectar a TON
-await walletManager.connectWallet(.tonkeeper)
+let tonWallet = try await walletManager.connectWallet(.tonkeeper, network: .ton)
 
 // Conectar a Algorand
-await walletManager.connectWallet(.pera)
+let algoWallet = try await walletManager.connectWallet(.pera, network: .algorand)
 
 // Conectar a Solana
-await walletManager.connectWallet(.phantom)
+let solanaWallet = try await walletManager.connectWallet(.phantom, network: .solana)
 ```
 
-### Conexión con QR
+### Generación de QR
 
 ```swift
-// Generar QR para conexión
-let qrCode = await walletManager.generateConnectionQR(for: .tonkeeper)
+let qrGenerator = QRCodeGenerator()
 
-// Escanear QR para conectar
-let result = await walletManager.scanAndConnect(qrCode: scannedCode)
+// Generar QR para conexión TON
+let qrCode = try await qrGenerator.generateConnectionQR(for: .tonkeeper, network: .ton)
+
+// Generar QR para conexión Algorand
+let algoQR = try await qrGenerator.generateConnectionQR(for: .pera, network: .algorand)
 ```
 
 ## 🔑 Configuración WalletConnect
