@@ -25,23 +25,18 @@ MULTICHAIN-WALLET-CONNECT/
 ├── Sources/
 │   ├── Core/
 │   │   ├── MultichainWalletManager.swift
-│   │   ├── WalletConnectProtocol.swift
-│   │   └── NetworkManager.swift
+│   │   ├── SharedTypes.swift
+│   │   └── WalletConnectConfig.swift
 │   ├── Networks/
 │   │   ├── TON/
 │   │   ├── Algorand/
 │   │   ├── Solana/
 │   │   └── Ethereum/
 │   ├── Wallets/
-│   │   ├── TONKeeper/
-│   │   ├── PeraWallet/
-│   │   ├── Phantom/
-│   │   └── MetaMask/
+│   │   └── TONKeeper/
 │   ├── QR/
-│   │   ├── QRCodeGenerator.swift
-│   │   └── QRCodeScanner.swift
+│   │   └── QRCodeGenerator.swift
 │   └── Utils/
-│       ├── NetworkConfig.swift
 │       └── WalletModels.swift
 ├── Tests/
 ├── Package.swift
@@ -56,6 +51,8 @@ MULTICHAIN-WALLET-CONNECT/
 - Sistema de QR para conexión móvil
 - Integración con WalletConnect
 - Gestión unificada de billeteras
+- Configuración para mainnet
+- IDs de WalletConnect configurados
 
 ### 🚧 En Desarrollo
 - Integración específica con TONKeeper
@@ -69,7 +66,7 @@ MULTICHAIN-WALLET-CONNECT/
 ```swift
 // Package.swift
 dependencies: [
-    .package(url: "https://github.com/panacea-icono/multichain-wallet-connect.git", from: "1.0.0")
+    .package(url: "https://github.com/https-panacea-icono-org/MULTICHAIN-WALLET-CONNECT.git", from: "1.0.0")
 ]
 ```
 
@@ -102,6 +99,11 @@ let qrCode = await walletManager.generateConnectionQR(for: .tonkeeper)
 let result = await walletManager.scanAndConnect(qrCode: scannedCode)
 ```
 
+## 🔑 Configuración WalletConnect
+
+- **Project ID**: `1ceaca1be9a50ff20c416f4b7da95d84`
+- **Session ID**: `c05e44f7-8a6e-45ef-be63-438fee9d8676`
+
 ## 🔐 Seguridad
 
 - Validación de direcciones de wallet
@@ -109,6 +111,7 @@ let result = await walletManager.scanAndConnect(qrCode: scannedCode)
 - Manejo seguro de claves privadas
 - Timeouts para operaciones de red
 - Logging de auditoría
+- Configuración mainnet por defecto
 
 ## 📊 Monitoreo
 
@@ -134,3 +137,7 @@ Copyright © 2025 PANACEA Icono S.A. Todos los derechos reservados.
 ---
 
 **Desarrollado por PANACEA Icono S.A. - 2025**
+
+## 🔗 Repositorio
+
+[GitHub Repository](https://github.com/https-panacea-icono-org/MULTICHAIN-WALLET-CONNECT)
