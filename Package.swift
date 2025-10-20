@@ -39,14 +39,14 @@ let package = Package(
                 .product(name: "JWTKit", package: "jwt-kit"),
                 .product(name: "Alamofire", package: "Alamofire")
             ],
-            path: "Sources"
+            path: "Sources/MultichainWalletConnect"
         ),
         .testTarget(
             name: "MultichainWalletConnectTests",
             dependencies: [
                 "MultichainWalletConnect"
             ],
-            path: "Tests"
+            path: "Tests/MultichainWalletConnectTests"
         ),
     ]
 )

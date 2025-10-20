@@ -2,10 +2,10 @@ import Foundation
 import MultichainWalletConnect
 
 @main
-struct SimulationApp {
+struct ConsoleSimulationApp {
     static func main() async {
-        print("🚀 MULTICHAIN WALLET CONNECT - SIMULACIÓN")
-        print("==========================================")
+        print("🚀 MULTICHAIN WALLET CONNECT - CONSOLE SIMULATION")
+        print("================================================")
         print()
         
         // Inicializar el manager

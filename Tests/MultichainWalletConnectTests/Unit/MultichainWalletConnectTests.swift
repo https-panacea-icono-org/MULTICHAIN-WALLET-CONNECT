@@ -72,10 +72,10 @@ func testConfigurationManagerDefault() async throws {
 
 @Test("QRCodeGenerator should be created")
 func testQRCodeGeneratorCreation() async throws {
-    let generator = QRCodeGenerator()
+    _ = QRCodeGenerator()
     
-    // Just test that the generator can be created
-    #expect(true) // Generator created successfully
+    // Test that the generator can be created successfully
+    #expect(Bool(true)) // Generator created successfully
 }
 
 // MARK: - MultichainWalletManager Tests

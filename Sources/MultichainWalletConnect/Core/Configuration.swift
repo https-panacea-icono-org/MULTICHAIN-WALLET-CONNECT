@@ -1,8 +1,11 @@
+// MARK: - Configuration Management
+// This file handles configuration for WalletConnect and network settings
+
 import Foundation
 
 // MARK: - Configuration Protocol
 
-public protocol ConfigurationProvider {
+public protocol ConfigurationProvider: Sendable {
     var walletConnectProjectId: String { get }
     var walletConnectSessionId: String { get }
     var ethereumInfuraProjectId: String? { get }
@@ -56,28 +59,35 @@ public struct EnvironmentConfiguration: ConfigurationProvider {
 
 // MARK: - Configuration Manager
 
-public class ConfigurationManager {
+public class ConfigurationManager: @unchecked Sendable {
     public static let shared = ConfigurationManager()
     
     private var _configuration: ConfigurationProvider?
+    private let queue = DispatchQueue(label: "configuration.manager", attributes: .concurrent)
     
     public var configuration: ConfigurationProvider {
-        if let config = _configuration {
-            return config
+        return queue.sync {
+            if let config = _configuration {
+                return config
+            }
+            
+            // Intentar cargar desde variables de entorno primero
+            let envConfig = EnvironmentConfiguration()
+            _configuration = envConfig
+            return envConfig
         }
-        
-        // Intentar cargar desde variables de entorno primero
-        let envConfig = EnvironmentConfiguration()
-        _configuration = envConfig
-        return envConfig
     }
     
     public func setConfiguration(_ configuration: ConfigurationProvider) {
-        _configuration = configuration
+        queue.async(flags: .barrier) {
+            self._configuration = configuration
+        }
     }
     
     public func resetToDefault() {
-        _configuration = nil
+        queue.async(flags: .barrier) {
+            self._configuration = nil
+        }
     }
     
     private init() {}
@@ -85,7 +95,7 @@ public class ConfigurationManager {
 
 // MARK: - Network Configuration
 
-public struct NetworkConfiguration {
+public struct NetworkConfiguration: Codable, Sendable {
     public let rpcUrl: String
     public let chainId: String
     public let isMainnet: Bool
@@ -161,6 +171,55 @@ public class NetworkConfigurationFactory {
                 nativeToken: "ETH",
                 decimals: 18
             )
+            
+        case .bitcoin:
+            return NetworkConfiguration(
+                rpcUrl: "https://blockstream.info/api",
+                chainId: "bitcoin-mainnet",
+                isMainnet: true,
+                explorerUrl: "https://blockstream.info",
+                nativeToken: "BTC",
+                decimals: 8
+            )
+            
+        case .polygon:
+            return NetworkConfiguration(
+                rpcUrl: "https://polygon-rpc.com",
+                chainId: "polygon-mainnet",
+                isMainnet: true,
+                explorerUrl: "https://polygonscan.com",
+                nativeToken: "MATIC",
+                decimals: 18
+            )
+            
+        case .arbitrum:
+            return NetworkConfiguration(
+                rpcUrl: "https://arb1.arbitrum.io/rpc",
+                chainId: "arbitrum-mainnet",
+                isMainnet: true,
+                explorerUrl: "https://arbiscan.io",
+                nativeToken: "ETH",
+                decimals: 18
+            )
+            
+        case .optimism:
+            return NetworkConfiguration(
+                rpcUrl: "https://mainnet.optimism.io",
+                chainId: "optimism-mainnet",
+                isMainnet: true,
+                explorerUrl: "https://optimistic.etherscan.io",
+                nativeToken: "ETH",
+                decimals: 18
+            )
         }
     }
+}
+
+// MARK: - WalletConnect Configuration
+
+public struct WalletConnectConfig {
+    public static let projectId: String = "1ceaca1be9a50ff20c416f4b7da95d84"
+    public static let sessionId: String = "c05e44f7-8a6e-45ef-be63-438fee9d8676"
+    public static let bridgeUrl: String = "https://bridge.walletconnect.org"
+    public static let relayUrl: String = "wss://relay.walletconnect.org"
 }
